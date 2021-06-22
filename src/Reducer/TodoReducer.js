@@ -1,11 +1,13 @@
-import { DELETE_TODO, LoadData, ADD_TODO } from "../action/types"
+import { DELETE_TODO, LoadData, ADD_TODO, Temp, EDIT, Update2 } from "../action/types"
 import { http } from "../BaseApi"
 
 
 
 let intial = {
     todos: [],
-    index: undefined
+    index: undefined,
+    temp: "",
+    updatedid: undefined
 }
 
 
@@ -21,7 +23,7 @@ function TodoReducer(state = intial, action) {
             let adddata = state.todos.concat(action.payload)
 
             //console.log(action.payload)
-            return { ...state, todos: adddata }
+            return { ...state, todos: adddata, temp: "" }
 
         case LoadData:
 
@@ -41,9 +43,8 @@ function TodoReducer(state = intial, action) {
             // }
 
 
-
             let deleted = newstate.todos.filter((singledata) => {
-                console.log(action.payload)
+                //  console.log(action.payload)
                 if (singledata.id == action.payload) {
                     return false
                 }
@@ -56,10 +57,28 @@ function TodoReducer(state = intial, action) {
 
             return { ...state, todos: deleted }
 
+        case Temp:
 
+            return { ...state, temp: action.payload }
 
+        case EDIT:
+            let newstate5 = { ...state }
+            let newindex = null
+            let newid = action.payload
+            for (let i = 0; i < newstate5.todos.length; i++) {
+                if (newstate5.todos[i].id == action.payload) {
+                    newindex = i
+                    break
+                }
+            }
+            // console.log(newindex)
+            return { ...state, temp: newstate5.todos[newindex].title, index: newindex, updatedid: newid }
 
-
+        case Update2:
+            let newstate6 = [...state.todos]
+            newstate6[state.index] = action.payload
+            console.log(newstate6)
+            return { ...state, todos: newstate6, temp: "", index: undefined, updatedid: undefined }
 
     }
 
