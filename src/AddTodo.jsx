@@ -1,37 +1,55 @@
 import React, { useState } from "react"
 import { connect } from "react-redux"
-import { Add } from "./action/TodoAction"
+import { Add, InputData, UpdateTodo } from "./action/TodoAction"
 
 export function AddTodo(props) {
 
-    const [tempvalue, settemp] = useState("")
+    // const [tempvalue, settemp] = useState("")
 
     function clickme() {
         //console.log("dtrsdyrsyrstr")
         props.addtodo({
-            title: tempvalue,
+            title: props.tempvalue,
             complete: false,
         })
-        settemp("")
+        // settemp("")
+    }
+
+    function clickme2() {
+        //console.log("dtrsdyrsyrstr")
+        props.update({
+            title: props.tempvalue,
+            complete: false,
+            id: props.SelectId
+        })
+        // settemp("")
     }
 
     function change(event) {
-        settemp(event.target.value)
+        props.settemp(event.target.value)
 
+    }
+
+    let btn = <button onClick={clickme}>Submit</button>
+
+    if (props.indexvalue !== undefined) {
+        btn = <button onClick={clickme2}>Update</button>
     }
 
     return (
         <>
             <h1>Add Todd</h1>
-            <input value={tempvalue} onChange={change} /><br />
-            <button onClick={clickme}>Submit</button>
-
+            <input value={props.tempvalue} onChange={change} /><br />
+            {btn}
         </>
     )
 }
 
 function myStateToProp(state) {
-    return { tempvalue: state.todoReducer.temp }
+    return {
+        tempvalue: state.todoReducer.temp,
+        indexvalue: state.todoReducer.index, SelectId: state.todoReducer.updatedid
+    }
 }
 
 //console.log(mapDispatchToProp)
@@ -39,6 +57,8 @@ function mapDispatchToProp(dispatch) {
 
     return {
         "addtodo": Add(dispatch),
+        "settemp": InputData(dispatch),
+        "update": UpdateTodo(dispatch)
     }
 
 }

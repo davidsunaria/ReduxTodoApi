@@ -1,25 +1,35 @@
 import { connect } from "react-redux"
 import React, { useState, useEffect } from "react"
-import { LoadApi, Delete } from "./action/TodoAction"
+import { LoadApi, Delete, update, Update } from "./action/TodoAction"
 
 function TodoList(props) {
 
     function clickme(id) {
-        props.deletetodo(id);
+        props.delete2(id);
     }
 
-    let todos = props.list.map(value => {
+    function clickme2(id) {
+        props.edit(id);
+    }
+
+    let todos = props.list.map((value, i) => {
         return <>
             <h2 key={value.id}>{value.title} <button onClick={
                 () => {
                     clickme(value.id)
                 }
-            }>Delete</button></h2>
+            }>Delete</button>
+                <button onClick={
+                    () => {
+                        clickme2(value.id)
+                    }
+                }>Update</button>
+            </h2>
         </>
     })
 
     useEffect(() => {
-        props.loadData();
+        props.load();
     }, [])
 
     return (
@@ -34,13 +44,13 @@ function myStateToProp(state) {
     return { list: state.todoReducer.todos }
 }
 
-function mapDispatchToProp(dispatch) {
-    return {
-        "loadData": LoadApi(dispatch),
-        "deletetodo": Delete(dispatch)
-    }
-}
+// function mapDispatchToProp(dispatch) {
+//     return {
+//         "loadData": LoadApi(dispatch),
+//         "deletetodo": Delete(dispatch)
+//     }
+// }
 
 
 
-export default connect(myStateToProp, mapDispatchToProp)(TodoList)
+export default connect(myStateToProp, { load: LoadApi, delete2: Delete, edit: Update })(TodoList)

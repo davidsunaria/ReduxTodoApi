@@ -1,3 +1,7 @@
 export const ADD_TODO = "add_tod"
 export const LoadData = "Load_Data"
 export const DELETE_TODO = "delete"
+export const UPDATE_TODO = "update"
+export const EDIT = "edit"
+export const Temp = "tempvalue"
+export const Update2 = "updated"
